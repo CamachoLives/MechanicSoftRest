@@ -1,4 +1,4 @@
-package com.mechanicsoft.entity;
+package com.mechanicsoft.Features.Vehiculos.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;

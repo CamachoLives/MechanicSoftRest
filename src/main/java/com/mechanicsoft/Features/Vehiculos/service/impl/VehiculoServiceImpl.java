@@ -1,8 +1,8 @@
-package com.mechanicsoft.service.impl;
+package com.mechanicsoft.Features.Vehiculos.service.impl;
 
-import com.mechanicsoft.entity.Vehiculo;
-import com.mechanicsoft.repository.VehiculoRepository;
-import com.mechanicsoft.service.interfaces.VehiculoService;
+import com.mechanicsoft.Features.Vehiculos.entity.Vehiculo;
+import com.mechanicsoft.Features.Vehiculos.repository.VehiculoRepository;
+import com.mechanicsoft.Features.Vehiculos.service.interfaces.VehiculoService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

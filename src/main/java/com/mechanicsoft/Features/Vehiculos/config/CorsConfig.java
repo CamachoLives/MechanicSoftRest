@@ -1,4 +1,4 @@
-package com.mechanicsoft.config;
+package com.mechanicsoft.Features.Vehiculos.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
