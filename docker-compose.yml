@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: meso
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "12345678"
+    ports:
+      - "5432:5432"
+    volumes:
+      - mechanicsoft_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: Dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/meso
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: "12345678"
+    ports:
+      - "9769:9769"
+
+volumes:
+  mechanicsoft_db_data:
