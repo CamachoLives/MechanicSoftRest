@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class VehiculoServiceImpl implements VehiculoService {
+public class    VehiculoServiceImpl implements VehiculoService {
 
     private final VehiculoRepository repository;
 
@@ -57,6 +57,7 @@ public class VehiculoServiceImpl implements VehiculoService {
         existente.setFotoVehiculo(vehiculo.getFotoVehiculo());
         existente.setPropietarioActual(vehiculo.getPropietarioActual());
         existente.setTelefonoActual(vehiculo.getTelefonoActual());
+        existente.setMotivoIngreso(vehiculo.getMotivoIngreso());
 
         return repository.save(existente);
     }

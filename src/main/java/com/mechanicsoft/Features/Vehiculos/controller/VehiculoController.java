@@ -38,6 +38,11 @@ public class VehiculoController {
                 .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
     }
 
+    @PutMapping("/{id}")
+    public Vehiculo actualizar(@PathVariable Long id, @Valid @RequestBody Vehiculo vehiculo) {
+        return service.actualizar(id, vehiculo);
+    }
+
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         service.eliminar(id);
