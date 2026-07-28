@@ -1,13 +1,12 @@
 # 🔧 MechanicSoft — REST API 🚀
 
-¡Bienvenido al backend de **MechanicSoft**! Esta es una API REST robusta, moderna y altamente escalable desarrollada en **Spring Boot**. Su objetivo principal es optimizar y automatizar la gestión de talleres automotrices, facilitando el control de ingresos de vehículos, el historial de reparaciones y la gestión inteligente de clientes.
+¡Bienvenido al backend de **MechanicSoft**! Esta es una API REST desarrollada en **Spring Boot** para la gestión de talleres de motos, encargada del registro, consulta, actualización y eliminación de los vehículos que ingresan al taller. Trabaja de la mano con el frontend **MechanicSoftIU**, que además añade el tablero del taller y la administración de usuarios, roles y grupos.
 
 ---
 
 ## ⚡ Características Clave
 
-*   **Gestión Inteligente de Vehículos:** Control detallado de placas, marcas, modelos, kilometraje, cilindraje, fotos y motivos de ingreso al taller.
-*   **Vinculación Automática de Clientes:** Flujo inteligente que detecta si un cliente ya existe (por su teléfono) al registrar un vehículo, actualizando sus datos o creando uno nuevo en caso de ser un cliente primerizo.
+*   **Gestión de Vehículos:** control detallado de placas, marcas, modelos, kilometraje, cilindraje, fotos y motivo de ingreso al taller, con CRUD completo (incluida la actualización).
 *   **Arquitectura Limpia:** Organizado bajo el patrón **Package by Feature**, asegurando que el código sea modular, fácil de mantener y listo para escalar.
 *   **Validaciones Rigurosas:** Integración con Jakarta Validation para asegurar que ningún dato corrupto o incompleto llegue a la base de datos.
 *   **Auditoría Automática:** Control de tiempos mediante hooks de persistencia (`createdAt`) para saber exactamente cuándo ingresó cada registro.
@@ -34,44 +33,66 @@ A diferencia de las arquitecturas tradicionales por capas pesadas, este proyecto
 ```text
 com.mechanicsoft
 ├── Features
-│   ├── Clientes
-│   │   ├── controller
-│   │   ├── entity
-│   │   ├── repository
-│   │   └── service
 │   └── Vehiculos
+│       ├── config
 │       ├── controller
 │       ├── entity
 │       ├── repository
 │       └── service
-└── MechanicSoftApplication.java
+└── MechanicsoftApiApplication.java
+```
 
+---
 
+## 🚀 Cómo empezar
 
-🚀 Cómo Empezar (Desarrollo Local)
-1. Prerrequisitos
-Java Development Kit (JDK) 17 o superior instalado.
+### Opción A — con Docker (la más rápida)
 
-PostgreSQL corriendo localmente (puerto por defecto 5432).
+Requisitos: Docker y Docker Compose.
 
-Tu IDE favorito (IntelliJ IDEA recomendado).
+```bash
+docker compose up --build
+```
 
-2. Configurar la Base de Datos
-Crea una base de datos en tu servidor PostgreSQL llamada meso. Luego, asegúrate de tener tu archivo application-dev.properties en la carpeta src/main/resources/ con tus credenciales:
+Esto levanta PostgreSQL y la API juntos, ya conectados entre sí. Cuando termine de arrancar, la API queda lista en **http://localhost:9769**.
 
-Properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/meso
-spring.datasource.username=tu_usuario
-spring.datasource.password=tu_contraseña
-spring.jpa.hibernate.ddl-auto=update
-3. Ejecutar la Aplicación
-Puedes arrancar el proyecto desde tu IDE activando el perfil de desarrollo (dev), o usar la terminal desde la raíz del proyecto:
+Para detenerlo: `docker compose down` (agrega `-v` si además quieres borrar los datos de la base de datos).
 
-Bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
-Cuando veas el banner de Spring en la consola, la API estará lista para recibir peticiones en http://localhost:9798.
+### Opción B — local, sin Docker
 
-👥 Creadores & Equipo de Desarrollo
+Requisitos:
+
+*   JDK 17 o superior.
+*   PostgreSQL corriendo localmente (puerto 5432).
+
+Pasos:
+
+1.  Crea una base de datos llamada `meso` en tu PostgreSQL local.
+2.  Si tu usuario/contraseña de Postgres no son `postgres` / `12345678`, ajústalos en `src/main/resources/application-Dev.properties` (el perfil `Dev` ya está activo por defecto, así que no hace falta pasarlo por parámetro).
+3.  Ejecuta desde la raíz del proyecto:
+
+    ```bash
+    ./mvnw spring-boot:run
+    ```
+
+Cuando veas el banner de Spring en la consola, la API estará lista en **http://localhost:9769**.
+
+### Endpoints disponibles
+
+| Método | Ruta                        | Descripción                  |
+|--------|-----------------------------|-------------------------------|
+| GET    | `/api/vehiculos`            | Lista todos los vehículos     |
+| GET    | `/api/vehiculos/{id}`       | Busca un vehículo por id      |
+| GET    | `/api/vehiculos/placa/{placa}` | Busca un vehículo por placa |
+| POST   | `/api/vehiculos`            | Registra un vehículo nuevo    |
+| PUT    | `/api/vehiculos/{id}`       | Actualiza un vehículo existente |
+| DELETE | `/api/vehiculos/{id}`       | Elimina un vehículo           |
+
+Este backend sirve principalmente al frontend **MechanicSoftIU** (React + Vite), que por defecto espera encontrarlo en `http://localhost:9769`.
+
+---
+
+## 👥 Creadores & Equipo de Desarrollo
 Este proyecto es diseñado, desarrollado y mantenido con ❤️ por:
 
 Cristian Camacho — GitHub Profile
