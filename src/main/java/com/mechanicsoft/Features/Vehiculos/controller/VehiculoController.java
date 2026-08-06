@@ -2,9 +2,12 @@ package com.mechanicsoft.Features.Vehiculos.controller;
 
 import com.mechanicsoft.Features.Vehiculos.entity.Vehiculo;
 import com.mechanicsoft.Features.Vehiculos.service.interfaces.VehiculoService;
+import com.mechanicsoft.exception.RecursoNoEncontradoException;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/vehiculos")
@@ -29,13 +32,13 @@ public class VehiculoController {
     @GetMapping("/{id}")
     public Vehiculo buscarPorId(@PathVariable Long id) {
         return service.buscarPorId(id)
-                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Vehículo no encontrado"));
     }
 
     @GetMapping("/placa/{placa}")
     public Vehiculo buscarPorPlaca(@PathVariable String placa) {
         return service.buscarPorPlaca(placa)
-                .orElseThrow(() -> new RuntimeException("Vehículo no encontrado"));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Vehículo no encontrado"));
     }
 
     @PutMapping("/{id}")
@@ -43,8 +46,8 @@ public class VehiculoController {
         return service.actualizar(id, vehiculo);
     }
 
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        service.eliminar(id);
+    @PatchMapping("/{id}/estado")
+    public Vehiculo cambiarEstado(@PathVariable Long id, @RequestBody Map<String, Boolean> body) {
+        return service.cambiarEstado(id, Boolean.TRUE.equals(body.get("activo")));
     }
 }
