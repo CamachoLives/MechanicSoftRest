@@ -1,5 +1,6 @@
 package com.mechanicsoft.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -33,6 +34,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CredencialesInvalidasException.class)
     public ResponseEntity<Map<String, Object>> manejarCredencialesInvalidas(CredencialesInvalidasException ex) {
         return cuerpo(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    // DataIntegrityViolationException extiende RuntimeException, así que sin este
+    // manejador caía en el genérico de abajo: 500 con el mensaje crudo del driver
+    // JDBC (nombre de constraint, tabla, etc.) filtrado tal cual al cliente. Un
+    // teléfono/placa/código/usuario duplicado es un conflicto del cliente (409),
+    // no un error del servidor.
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> manejarIntegridadDatos(DataIntegrityViolationException ex) {
+        return cuerpo(HttpStatus.CONFLICT, "El registro entra en conflicto con datos existentes (¿un valor único duplicado?).");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
