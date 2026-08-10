@@ -3,6 +3,7 @@ package com.mechanicsoft.Features.Clientes.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class Cliente {
     private String nombre;
 
     @NotBlank(message = "El teléfono es obligatorio")
+    @Pattern(regexp = "^[0-9+()\\s-]{7,20}$", message = "El teléfono no es válido")
     @Column(nullable = false, unique = true, length = 20)
     private String telefono;
 

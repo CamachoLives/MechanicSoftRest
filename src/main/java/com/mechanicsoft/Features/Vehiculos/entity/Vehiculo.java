@@ -2,9 +2,11 @@ package com.mechanicsoft.Features.Vehiculos.entity;
 
 import com.mechanicsoft.Features.Clientes.entity.Cliente;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +28,7 @@ public class Vehiculo {
     private Long id;
 
     @NotBlank(message = "La placa es obligatoria")
+    @Pattern(regexp = "^[A-Za-z0-9-]{4,10}$", message = "La placa solo puede tener letras, números y guiones (4 a 10 caracteres)")
     @Column(nullable = false, unique = true, length = 20)
     private String placa;
 
@@ -38,6 +41,8 @@ public class Vehiculo {
     private String modelo;
 
     @NotNull(message = "El año es obligatorio")
+    @Min(value = 1900, message = "El año no es válido")
+    @Max(value = 2100, message = "El año no es válido")
     @Column(nullable = false)
     private Integer anio;
 
