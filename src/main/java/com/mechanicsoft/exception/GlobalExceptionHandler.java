@@ -1,6 +1,7 @@
 package com.mechanicsoft.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -44,6 +45,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, Object>> manejarIntegridadDatos(DataIntegrityViolationException ex) {
         return cuerpo(HttpStatus.CONFLICT, "El registro entra en conflicto con datos existentes (¿un valor único duplicado?).");
+    }
+
+    // Se dispara cuando dos solicitudes casi simultáneas modifican el mismo
+    // registro con @Version (hoy, Repuesto): la que confirma segunda pierde
+    // la carrera. 409 con un mensaje accionable, no un 500 genérico.
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<Map<String, Object>> manejarBloqueoOptimista(ObjectOptimisticLockingFailureException ex) {
+        return cuerpo(HttpStatus.CONFLICT, "Otra operación modificó este registro al mismo tiempo. Vuelve a intentarlo.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

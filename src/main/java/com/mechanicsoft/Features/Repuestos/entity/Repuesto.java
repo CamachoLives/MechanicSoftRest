@@ -52,6 +52,13 @@ public class Repuesto {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    // Bloqueo optimista: dos solicitudes casi simultáneas sobre el mismo
+    // repuesto (ej. dos órdenes agregando la última unidad en stock) ya no
+    // pueden pisarse una a la otra — la segunda en confirmar su UPDATE
+    // recibe ObjectOptimisticLockingFailureException en vez de sobrevender.
+    @Version
+    private Long version;
+
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
