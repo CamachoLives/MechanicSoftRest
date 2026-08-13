@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Cliente {
     private Long id;
 
     @NotBlank(message = "El nombre es obligatorio")
+    @Size(max = 150, message = "El nombre no puede tener más de 150 caracteres")
     @Column(nullable = false, length = 150)
     private String nombre;
 
@@ -33,6 +35,7 @@ public class Cliente {
     private String telefono;
 
     @Email(message = "El correo no es válido")
+    @Size(max = 150, message = "El correo no puede tener más de 150 caracteres")
     @Column(length = 150)
     private String correo;
 

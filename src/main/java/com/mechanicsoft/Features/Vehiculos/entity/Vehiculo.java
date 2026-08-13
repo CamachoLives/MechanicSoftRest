@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,10 +34,12 @@ public class Vehiculo {
     private String placa;
 
     @NotBlank(message = "La marca es obligatoria")
+    @Size(max = 100, message = "La marca no puede tener más de 100 caracteres")
     @Column(nullable = false, length = 100)
     private String marca;
 
     @NotBlank(message = "El modelo es obligatorio")
+    @Size(max = 100, message = "El modelo no puede tener más de 100 caracteres")
     @Column(nullable = false, length = 100)
     private String modelo;
 
@@ -47,6 +50,7 @@ public class Vehiculo {
     private Integer anio;
 
     @NotBlank(message = "El color es obligatorio")
+    @Size(max = 50, message = "El color no puede tener más de 50 caracteres")
     @Column(nullable = false, length = 50)
     private String color;
 
@@ -63,6 +67,7 @@ public class Vehiculo {
     @Column(name = "foto_vehiculo")
     private String fotoVehiculo;
 
+    @Size(max = 500, message = "Las observaciones no pueden tener más de 500 caracteres")
     @Column(length = 500)
     private String observaciones;
 

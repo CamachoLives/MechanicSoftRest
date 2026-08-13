@@ -7,6 +7,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,9 +37,11 @@ public class ServicioOrden {
     private OrdenServicio orden;
 
     @NotBlank(message = "El nombre del servicio es obligatorio")
+    @Size(max = 150, message = "El nombre del servicio no puede tener más de 150 caracteres")
     @Column(name = "nombre_servicio", nullable = false, length = 150)
     private String nombreServicio;
 
+    @Size(max = 300, message = "La descripción no puede tener más de 300 caracteres")
     @Column(length = 300)
     private String descripcion;
 
