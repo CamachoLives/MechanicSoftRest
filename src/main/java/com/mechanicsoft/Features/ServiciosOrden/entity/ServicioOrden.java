@@ -1,6 +1,7 @@
 package com.mechanicsoft.Features.ServiciosOrden.entity;
 
 import com.mechanicsoft.Features.OrdenesServicio.entity.OrdenServicio;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -29,6 +30,9 @@ public class ServicioOrden {
     // nunca la manda el cliente en el cuerpo de la petición.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orden_id", nullable = false)
+    // El cliente ya sabe a qué orden pertenece esta línea (viene en la URL);
+    // serializarla completa duplicaría vehiculo+cliente+mecánicos en cada fila.
+    @JsonIgnore
     private OrdenServicio orden;
 
     @NotBlank(message = "El nombre del servicio es obligatorio")
