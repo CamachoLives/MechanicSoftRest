@@ -47,11 +47,23 @@ public class RepuestoController {
 
     @PostMapping("/{id}/entradas")
     public Repuesto registrarEntrada(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
-        return service.registrarEntrada(id, body.getOrDefault("cantidad", 0));
+        return service.registrarEntrada(id, cantidadRequerida(body));
     }
 
     @PostMapping("/{id}/salidas")
     public Repuesto registrarSalida(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
-        return service.registrarSalida(id, body.getOrDefault("cantidad", 0));
+        return service.registrarSalida(id, cantidadRequerida(body));
+    }
+
+    // getOrDefault solo aplica el default cuando la clave está ausente, no cuando
+    // está presente con valor null (ej. {"cantidad": null}) — ese caso llegaba
+    // como null hasta el unboxing a "int" del service y explotaba en
+    // NullPointerException (500 genérico).
+    private int cantidadRequerida(Map<String, Integer> body) {
+        Integer cantidad = body.get("cantidad");
+        if (cantidad == null) {
+            throw new IllegalArgumentException("La cantidad es obligatoria.");
+        }
+        return cantidad;
     }
 }

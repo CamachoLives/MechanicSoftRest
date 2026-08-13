@@ -75,6 +75,16 @@ public class GlobalExceptionHandler {
         return cuerpo(HttpStatus.BAD_REQUEST, "El valor de '" + ex.getName() + "' no es válido.");
     }
 
+    // Para los pocos endpoints que reciben un Map<String,?> en vez de una entidad
+    // validable con @Valid (cambiar estado, entradas/salidas de stock): un campo
+    // ausente/nulo dentro del Map no lo detecta Bean Validation, y desembocaba en
+    // NullPointerException al des-boxear un Integer o al pasarle null a
+    // EstadoOrden.valueOf — ambos caían en el 500 genérico.
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> manejarArgumentoInvalido(IllegalArgumentException ex) {
+        return cuerpo(HttpStatus.BAD_REQUEST, ex.getMessage() != null ? ex.getMessage() : "Solicitud inválida.");
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> manejarValidacion(MethodArgumentNotValidException ex) {
         Map<String, String> errores = ex.getBindingResult().getFieldErrors().stream()

@@ -45,7 +45,11 @@ public class OrdenServicioController {
 
     @PatchMapping("/{id}/estado")
     public OrdenServicio cambiarEstado(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        EstadoOrden nuevoEstado = EstadoOrden.valueOf(body.get("estado"));
+        String estado = body.get("estado");
+        if (estado == null) {
+            throw new IllegalArgumentException("El estado es obligatorio.");
+        }
+        EstadoOrden nuevoEstado = EstadoOrden.valueOf(estado);
         return service.cambiarEstado(id, nuevoEstado);
     }
 }
