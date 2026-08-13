@@ -21,7 +21,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "vehiculos")
+// Postgres no crea automáticamente un índice para columnas FK (solo para PK/unique);
+// cliente_id se consulta en cada findByClienteId (GET /api/clientes/{id}/vehiculos).
+@Table(name = "vehiculos", indexes = @Index(name = "idx_vehiculos_cliente_id", columnList = "cliente_id"))
 public class Vehiculo {
 
     @Id

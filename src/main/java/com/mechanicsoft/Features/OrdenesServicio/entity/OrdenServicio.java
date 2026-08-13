@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ordenes_servicio")
+@Table(name = "ordenes_servicio", indexes = @Index(name = "idx_ordenes_vehiculo_id", columnList = "vehiculo_id"))
 public class OrdenServicio {
 
     @Id

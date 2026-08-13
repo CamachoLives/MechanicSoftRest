@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "servicios_orden")
+@Table(name = "servicios_orden", indexes = @Index(name = "idx_servicios_orden_orden_id", columnList = "orden_id"))
 public class ServicioOrden {
 
     @Id
