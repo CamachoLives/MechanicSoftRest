@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -63,6 +64,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, Object>> manejarCuerpoInvalido(HttpMessageNotReadableException ex) {
         return cuerpo(HttpStatus.BAD_REQUEST, "El cuerpo de la petición no es válido.");
+    }
+
+    // Un id no numérico en la URL (GET /api/clientes/abc) o un valor que no
+    // matchea un enum en un query param (?estado=BOGUS) también los envuelve
+    // Spring antes de llegar al controlador. Mismo motivo que arriba: sin esto
+    // caía en 500 con el mensaje interno del framework.
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, Object>> manejarParametroInvalido(MethodArgumentTypeMismatchException ex) {
+        return cuerpo(HttpStatus.BAD_REQUEST, "El valor de '" + ex.getName() + "' no es válido.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
