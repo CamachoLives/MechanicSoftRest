@@ -4,6 +4,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,6 +54,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     public ResponseEntity<Map<String, Object>> manejarBloqueoOptimista(ObjectOptimisticLockingFailureException ex) {
         return cuerpo(HttpStatus.CONFLICT, "Otra operación modificó este registro al mismo tiempo. Vuelve a intentarlo.");
+    }
+
+    // Cuerpo JSON malformado o con un valor de enum que no existe (ej. "metodoPago":
+    // "BITCOIN" contra MetodoPago). Jackson lo envuelve en esta excepción antes de
+    // que el controlador la vea; sin manejador propio caía en el 500 genérico con
+    // el mensaje interno de Jackson (nombres de clase incluidos).
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, Object>> manejarCuerpoInvalido(HttpMessageNotReadableException ex) {
+        return cuerpo(HttpStatus.BAD_REQUEST, "El cuerpo de la petición no es válido.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
