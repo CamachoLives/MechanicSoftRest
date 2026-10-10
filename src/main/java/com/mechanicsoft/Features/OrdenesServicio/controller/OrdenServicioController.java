@@ -2,6 +2,7 @@ package com.mechanicsoft.Features.OrdenesServicio.controller;
 
 import com.mechanicsoft.Features.OrdenesServicio.entity.EstadoOrden;
 import com.mechanicsoft.Features.OrdenesServicio.entity.OrdenServicio;
+import com.mechanicsoft.Features.OrdenesServicio.dto.ResumenOrdenesResponse;
 import com.mechanicsoft.Features.OrdenesServicio.service.interfaces.OrdenServicioService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,11 @@ public class OrdenServicioController {
             @RequestParam(required = false) Long clienteId
     ) {
         return service.listar(estado, vehiculoId, clienteId);
+    }
+
+    @GetMapping("/resumen")
+    public ResumenOrdenesResponse resumir() {
+        return service.resumir();
     }
 
     @GetMapping("/{id}")

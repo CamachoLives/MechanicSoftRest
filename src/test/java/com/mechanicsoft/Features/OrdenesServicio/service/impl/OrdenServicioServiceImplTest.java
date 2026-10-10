@@ -2,6 +2,7 @@ package com.mechanicsoft.Features.OrdenesServicio.service.impl;
 
 import com.mechanicsoft.Features.OrdenesServicio.entity.EstadoOrden;
 import com.mechanicsoft.Features.OrdenesServicio.entity.OrdenServicio;
+import com.mechanicsoft.Features.OrdenesServicio.dto.EstadoOrdenResumen;
 import com.mechanicsoft.Features.OrdenesServicio.repository.OrdenServicioRepository;
 import com.mechanicsoft.Features.RepuestosOrden.entity.RepuestoOrden;
 import com.mechanicsoft.Features.RepuestosOrden.repository.RepuestoOrdenRepository;
@@ -132,5 +133,28 @@ class OrdenServicioServiceImplTest {
         service.recalcularValorTotal(1L);
 
         assertEquals(0, new BigDecimal("80000").compareTo(orden.getValorTotal()));
+    }
+
+    @Test
+    void resumir_incluyeTodosLosEstadosYCeroParaLosSinOrdenes() {
+        when(repository.resumirPorEstado()).thenReturn(List.of(
+                new EstadoOrdenResumen(EstadoOrden.RECIBIDO, 2),
+                new EstadoOrdenResumen(EstadoOrden.FINALIZADO, 1),
+                new EstadoOrdenResumen(EstadoOrden.ENTREGADO, 3),
+                new EstadoOrdenResumen(EstadoOrden.CANCELADO, 1)
+        ));
+
+        var resumen = service.resumir();
+
+        assertEquals(7, resumen.totalOrdenes());
+        assertEquals(3, resumen.ordenesAbiertas());
+        assertEquals(List.of(EstadoOrden.values()), resumen.porEstado().stream()
+                .map(EstadoOrdenResumen::estado)
+                .toList());
+        assertEquals(0, resumen.porEstado().stream()
+                .filter(estado -> estado.estado() == EstadoOrden.EN_DIAGNOSTICO)
+                .findFirst()
+                .orElseThrow()
+                .cantidad());
     }
 }

@@ -2,6 +2,8 @@ package com.mechanicsoft.Features.OrdenesServicio.service.impl;
 
 import com.mechanicsoft.Features.OrdenesServicio.entity.EstadoOrden;
 import com.mechanicsoft.Features.OrdenesServicio.entity.OrdenServicio;
+import com.mechanicsoft.Features.OrdenesServicio.dto.EstadoOrdenResumen;
+import com.mechanicsoft.Features.OrdenesServicio.dto.ResumenOrdenesResponse;
 import com.mechanicsoft.Features.OrdenesServicio.repository.OrdenServicioRepository;
 import com.mechanicsoft.Features.OrdenesServicio.service.interfaces.OrdenServicioService;
 import com.mechanicsoft.Features.RepuestosOrden.entity.RepuestoOrden;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -42,6 +46,8 @@ public class OrdenServicioServiceImpl implements OrdenServicioService {
     /** Estados en los que ya no se pueden agregar/quitar líneas de servicio, repuesto o pago. */
     private static final Set<EstadoOrden> ESTADOS_INMUTABLES =
             Set.of(EstadoOrden.FINALIZADO, EstadoOrden.ENTREGADO, EstadoOrden.CANCELADO);
+    private static final Set<EstadoOrden> ESTADOS_TERMINALES =
+            Set.of(EstadoOrden.ENTREGADO, EstadoOrden.CANCELADO);
 
     private final OrdenServicioRepository repository;
     private final VehiculoRepository vehiculoRepository;
@@ -84,6 +90,25 @@ public class OrdenServicioServiceImpl implements OrdenServicioService {
             return repository.findByEstado(estado);
         }
         return repository.findAll();
+    }
+
+    @Override
+    public ResumenOrdenesResponse resumir() {
+        Map<EstadoOrden, Long> cantidades = new EnumMap<>(EstadoOrden.class);
+        for (EstadoOrdenResumen resumen : repository.resumirPorEstado()) {
+            cantidades.put(resumen.estado(), resumen.cantidad());
+        }
+
+        List<EstadoOrdenResumen> porEstado = Arrays.stream(EstadoOrden.values())
+                .map(estado -> new EstadoOrdenResumen(estado, cantidades.getOrDefault(estado, 0L)))
+                .toList();
+        long totalOrdenes = porEstado.stream().mapToLong(EstadoOrdenResumen::cantidad).sum();
+        long ordenesAbiertas = porEstado.stream()
+                .filter(resumen -> !ESTADOS_TERMINALES.contains(resumen.estado()))
+                .mapToLong(EstadoOrdenResumen::cantidad)
+                .sum();
+
+        return new ResumenOrdenesResponse(totalOrdenes, ordenesAbiertas, porEstado);
     }
 
     @Override

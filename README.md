@@ -87,8 +87,22 @@ Cuando veas el banner de Spring en la consola, la API estará lista en **http://
 | POST   | `/api/vehiculos`            | Registra un vehículo nuevo    |
 | PUT    | `/api/vehiculos/{id}`       | Actualiza un vehículo existente |
 | DELETE | `/api/vehiculos/{id}`       | Elimina un vehículo           |
+| GET    | `/api/ordenes/resumen`      | Resume las órdenes por estado y cuenta las que siguen abiertas |
 
 Este backend sirve principalmente al frontend **MechanicSoftIU** (React + Vite), que por defecto espera encontrarlo en `http://localhost:9769`.
+
+El resumen incluye todos los estados posibles en `porEstado` (con cantidad `0` cuando no hay órdenes en un estado). `ordenesAbiertas` excluye las órdenes `ENTREGADO` y `CANCELADO`. Ejemplo:
+
+```json
+{
+  "totalOrdenes": 7,
+  "ordenesAbiertas": 3,
+  "porEstado": [
+    { "estado": "RECIBIDO", "cantidad": 2 },
+    { "estado": "EN_DIAGNOSTICO", "cantidad": 0 }
+  ]
+}
+```
 
 ---
 
