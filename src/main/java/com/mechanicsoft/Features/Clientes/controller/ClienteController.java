@@ -1,11 +1,13 @@
 package com.mechanicsoft.Features.Clientes.controller;
 
 import com.mechanicsoft.Features.Clientes.entity.Cliente;
+import com.mechanicsoft.Features.Clientes.entity.TipoDocumento;
 import com.mechanicsoft.Features.Clientes.service.interfaces.ClienteService;
 import com.mechanicsoft.Features.Vehiculos.entity.Vehiculo;
 import com.mechanicsoft.Features.Vehiculos.service.interfaces.VehiculoService;
 import com.mechanicsoft.exception.RecursoNoEncontradoException;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +39,14 @@ public class ClienteController {
     public Cliente buscarPorId(@PathVariable Long id) {
         return service.buscarPorId(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Cliente no encontrado"));
+    }
+
+    @GetMapping("/por-documento/{tipo}/{numero}")
+    public ResponseEntity<Cliente> buscarPorDocumento(@PathVariable TipoDocumento tipo,
+                                                       @PathVariable String numero) {
+        return service.buscarPorDocumento(tipo, numero)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")

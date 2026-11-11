@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface VehiculoRepository extends JpaRepository<Vehiculo, Long> {
 
+    @EntityGraph(attributePaths = {"cliente"})
     Optional<Vehiculo> findByPlaca(String placa);
 
     // Igual que en OrdenServicioRepository: cada vehículo serializado expone
