@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -25,9 +26,13 @@ public class Cliente {
     private Long id;
 
     @NotBlank(message = "El nombre es obligatorio")
-    @Size(max = 150, message = "El nombre no puede tener más de 150 caracteres")
-    @Column(nullable = false, length = 150)
+    @Size(max = 100, message = "El nombre no puede tener más de 100 caracteres")
+    @Column(nullable = false, length = 100)
     private String nombre;
+
+    @Size(max = 100, message = "El apellido no puede tener más de 100 caracteres")
+    @Column(length = 100)
+    private String apellido;
 
     @NotBlank(message = "El teléfono es obligatorio")
     @Pattern(regexp = "^[0-9+()\\s-]{7,20}$", message = "El teléfono no es válido")
@@ -38,6 +43,14 @@ public class Cliente {
     @Size(max = 150, message = "El correo no puede tener más de 150 caracteres")
     @Column(length = 150)
     private String correo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_documento", length = 10)
+    private TipoDocumento tipoDocumento;
+
+    @Size(max = 30, message = "El número de documento no puede tener más de 30 caracteres")
+    @Column(name = "numero_documento", length = 30)
+    private String numeroDocumento;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
