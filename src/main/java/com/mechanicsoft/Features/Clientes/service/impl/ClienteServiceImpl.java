@@ -1,6 +1,7 @@
 package com.mechanicsoft.Features.Clientes.service.impl;
 
 import com.mechanicsoft.Features.Clientes.entity.Cliente;
+import com.mechanicsoft.Features.Clientes.entity.TipoDocumento;
 import com.mechanicsoft.Features.Clientes.repository.ClienteRepository;
 import com.mechanicsoft.Features.Clientes.service.interfaces.ClienteService;
 import com.mechanicsoft.exception.RecursoNoEncontradoException;
@@ -37,13 +38,21 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public Optional<Cliente> buscarPorDocumento(TipoDocumento tipo, String numero) {
+        return repository.findByTipoDocumentoAndNumeroDocumento(tipo, numero);
+    }
+
+    @Override
     public Cliente actualizar(Long id, Cliente cliente) {
         Cliente existente = repository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Cliente no encontrado"));
 
         existente.setNombre(cliente.getNombre());
+        existente.setApellido(cliente.getApellido());
         existente.setTelefono(cliente.getTelefono());
         existente.setCorreo(cliente.getCorreo());
+        existente.setTipoDocumento(cliente.getTipoDocumento());
+        existente.setNumeroDocumento(cliente.getNumeroDocumento());
 
         return repository.save(existente);
     }
