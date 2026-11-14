@@ -11,8 +11,8 @@
 	<groupId>com.mechanicsoft</groupId>
 	<artifactId>mechanicsoft-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>mechanicsoft-api</name>
+	<description>REST API para gestión de taller de motos (MechanicSoft)</description>
 	<url/>
 	<licenses>
 		<license/>
