@@ -7,6 +7,7 @@ import com.mechanicsoft.Features.Vehiculos.entity.Vehiculo;
 import com.mechanicsoft.Features.Vehiculos.service.interfaces.VehiculoService;
 import com.mechanicsoft.exception.RecursoNoEncontradoException;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class ClienteController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Cliente guardar(@Valid @RequestBody Cliente cliente) {
         return service.guardar(cliente);
     }
