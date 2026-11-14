@@ -64,7 +64,7 @@ public class OrdenServicio {
     @Column(name = "fecha_entrega")
     private LocalDateTime fechaEntrega;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
