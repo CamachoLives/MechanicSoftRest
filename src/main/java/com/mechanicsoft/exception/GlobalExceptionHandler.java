@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> manejarGenerico(RuntimeException ex) {
-        return cuerpo(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        return cuerpo(HttpStatus.INTERNAL_SERVER_ERROR, "Ha ocurrido un error interno. Por favor intenta de nuevo más tarde.");
     }
 
     private ResponseEntity<Map<String, Object>> cuerpo(HttpStatus status, String mensaje) {
