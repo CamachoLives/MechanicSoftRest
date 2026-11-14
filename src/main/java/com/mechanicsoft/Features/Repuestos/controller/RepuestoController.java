@@ -4,6 +4,7 @@ import com.mechanicsoft.Features.Repuestos.entity.Repuesto;
 import com.mechanicsoft.Features.Repuestos.service.interfaces.RepuestoService;
 import com.mechanicsoft.exception.RecursoNoEncontradoException;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class RepuestoController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Repuesto crear(@Valid @RequestBody Repuesto repuesto) {
         return service.crear(repuesto);
     }
