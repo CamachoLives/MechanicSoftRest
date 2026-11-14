@@ -48,6 +48,10 @@ public class ConsultaPublicaController {
         if (forwarded != null && !forwarded.isBlank()) {
             return forwarded.split(",")[0].trim();
         }
+        String realIp = request.getHeader("X-Real-IP");
+        if (realIp != null && !realIp.isBlank()) {
+            return realIp.trim();
+        }
         return request.getRemoteAddr();
     }
 }
