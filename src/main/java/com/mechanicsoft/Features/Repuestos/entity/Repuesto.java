@@ -53,7 +53,7 @@ public class Repuesto {
     @Column(nullable = false)
     private Boolean activo = true;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     // Bloqueo optimista: dos solicitudes casi simultáneas sobre el mismo
