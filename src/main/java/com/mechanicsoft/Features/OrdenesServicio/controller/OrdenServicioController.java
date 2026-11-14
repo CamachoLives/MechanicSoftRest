@@ -5,6 +5,7 @@ import com.mechanicsoft.Features.OrdenesServicio.entity.OrdenServicio;
 import com.mechanicsoft.Features.OrdenesServicio.dto.ResumenOrdenesResponse;
 import com.mechanicsoft.Features.OrdenesServicio.service.interfaces.OrdenServicioService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class OrdenServicioController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public OrdenServicio crear(@Valid @RequestBody OrdenServicio orden) {
         return service.crear(orden);
     }
@@ -45,7 +47,7 @@ public class OrdenServicioController {
     }
 
     @PutMapping("/{id}")
-    public OrdenServicio actualizar(@PathVariable Long id, @RequestBody OrdenServicio orden) {
+    public OrdenServicio actualizar(@PathVariable Long id, @Valid @RequestBody OrdenServicio orden) {
         return service.actualizar(id, orden);
     }
 
