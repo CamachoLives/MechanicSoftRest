@@ -52,7 +52,7 @@ public class Cliente {
     @Column(name = "numero_documento", length = 30)
     private String numeroDocumento;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
